@@ -9,11 +9,7 @@ from app.chat import router as chat_router
 
 from fastapi.middleware.cors import CORSMiddleware
 
-
 # Create tables in MySQL
-
-
-
 
 app = FastAPI()
 @app.on_event("startup")

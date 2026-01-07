@@ -15,8 +15,6 @@ def _prehash(password: str) -> bytes:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
 def hash_password(password: str):
     pre = _prehash(password)
-    # print("PREHASH TYPE:", type(pre))
-    # print("PREHASH LENGTH:", len(pre))
     return pwd_context.hash(pre)
 
 def verify_password(password: str, hashed_password: str):

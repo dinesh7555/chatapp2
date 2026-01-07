@@ -9,7 +9,7 @@ class Neo4jDB:
             NEO4J_URI,
             auth=(NEO4J_USERNAME, NEO4J_PASSWORD)
         )
-
+        
     def close(self):
         self.driver.close()
 

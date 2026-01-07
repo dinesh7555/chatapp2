@@ -68,6 +68,8 @@ def build_system_prompt(knowledge_context: str | None = None) -> str:
     base_prompt = (
             "You are a helpful AI assistant.\n"
             "Answer the user's question clearly and accurately."
+             "Do NOT assume prior conversation unless explicitly shown.\n"
+            "Do NOT say phrases like 'previous discussions' or 'earlier conversations'."
     )
 
     if not knowledge_context:
@@ -76,8 +78,9 @@ def build_system_prompt(knowledge_context: str | None = None) -> str:
     return (
         base_prompt
         + "\n\n"
-        + "The following is background knowledge from the user's past discussions. "
-        + "Use it only if it is relevant to the current question.\n\n"
+        + "The following is OPTIONAL reference information. "
+        + "It is NOT part of the current conversation.\n"
+        + "Use it only if directly relevant.\n\n"
         + knowledge_context
     )
 

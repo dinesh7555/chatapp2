@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+python-dotenv
+passlib[bcrypt]
+passlib==1.7.4
+bcrypt==3.2.2
+python-jose
+pydantic
+requests
+neo4j==5.19.0
+email-validator
+cryptography

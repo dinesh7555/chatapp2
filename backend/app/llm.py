@@ -14,8 +14,7 @@ def call_llm(messages: list[dict], system_prompt: str ):
         "messages": [
             {"role": "system", "content": system_prompt},
             *messages
-        ],
-        "temperature": 0.7
+        ]
     }
 
     headers = {
