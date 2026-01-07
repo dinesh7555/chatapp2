@@ -1,4 +1,5 @@
 from passlib.context import CryptContext
+import hashlib
 from datetime import datetime, timedelta
 from jose import jwt
 from app.config import JWT_SECRET_KEY, JWT_ALGORITHM, JWT_EXPIRE_MINUTES
@@ -9,11 +10,18 @@ security = HTTPBearer()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+def _prehash(password: str) -> bytes:
+    # bcrypt-safe fixed-length input (32 bytes)
+    return hashlib.sha256(password.encode("utf-8")).hexdigest()
 def hash_password(password: str):
-    return pwd_context.hash(password)
+    pre = _prehash(password)
+    # print("PREHASH TYPE:", type(pre))
+    # print("PREHASH LENGTH:", len(pre))
+    return pwd_context.hash(pre)
 
 def verify_password(password: str, hashed_password: str):
-    return pwd_context.verify(password, hashed_password)
+    return pwd_context.verify(_prehash(password), hashed_password)
+    
 
 def create_access_token(data: dict):
     to_encode = data.copy()

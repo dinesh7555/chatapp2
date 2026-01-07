@@ -1,0 +1,13 @@
+# environment files
+
+backend/.env
+
+# python
+_pycache_/
+*.pyc
+venv/
+
+# node
+node_modules/
+# Ignore MySQL data
+mysql/

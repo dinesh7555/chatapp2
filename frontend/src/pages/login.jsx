@@ -1,74 +1,70 @@
 import { useState } from "react";
-import { apiRequest } from "../api/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { login } from "../api/auth";
+import "./auth.css";
 
-
-function Login({onLogin}) {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
-  async function handleLogin() {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     setError("");
     setLoading(true);
 
-    const data = await apiRequest("/login", "POST", {
-      email,
-      password,
-    });
-
-    setLoading(false);
-
-    if (data.detail) {
-      setError(data.detail);
-      return;
+    try {
+      const data = await login(email, password);
+      localStorage.setItem("token", data.access_token);
+      navigate("/chat");
+    } catch (err) {
+      setError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
-
-    // success
-    onLogin(data.access_token);
-    alert("Login successful");
-    navigate("/chat");
-  }
+  };
 
   return (
-  <form
-  className="container"
-  onSubmit={(e) => {
-    e.preventDefault();
-    handleLogin();
-  }}
-  >
-  <h2>Login</h2>
+    <div className="auth-page">
+      <form className="auth-card" onSubmit={handleLogin}>
+        <div>
+          <h2 className="auth-title">Welcome back</h2>
+          <p className="auth-subtitle">Login to continue</p>
+        </div>
 
-  {error && <p className="error">{error}</p>}
+        {error && <p className="auth-error">{error}</p>}
 
-  <input
-    type="email"
-    placeholder="Email"
-    value={email}
-    onChange={(e) => setEmail(e.target.value)}
-  />
+        <input
+          className="auth-input"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-  <input
-    type="password"
-    placeholder="Password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-  />
+        <input
+          className="auth-input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-  <button type="submit" disabled={loading}>
-    {loading ? "Logging in..." : "Login"}
-  </button>
+        <button className="auth-button" type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
 
-  <button type="button" onClick={() => navigate("/register")}>
-    Register
-  </button>
-    </form>
-
+        <div className="auth-footer">
+          Don’t have an account? <Link to="/register">Register</Link>
+        </div>
+      </form>
+    </div>
   );
-
 }
 
 export default Login;

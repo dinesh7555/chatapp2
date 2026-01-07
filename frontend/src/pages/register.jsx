@@ -1,73 +1,68 @@
 import { useState } from "react";
-import { apiRequest } from "../api/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { register } from "../api/auth";
+import "./auth.css";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  async function handleRegister() {
+  const handleRegister = async (e) => {
+    e.preventDefault();
     setError("");
-    setSuccess("");
     setLoading(true);
 
-    const data = await apiRequest("/register", "POST", {
-      email,
-      password,
-    });
-
-    setLoading(false);
-
-    if (data.detail) {
-      setError(data.detail);
-      return;
+    try {
+      await register(email, password);
+      navigate("/login");
+    } catch (err) {
+      setError("Email already registered");
+    } finally {
+      setLoading(false);
     }
-
-    setSuccess("Registration successful. Please login.");
-    setTimeout(() => navigate("/"), 1000);
-  }
+  };
 
   return (
-    <form
-  className="container"
-  onSubmit={(e) => {
-    e.preventDefault();
-    handleRegister();
-  }}
-    >
-  <h2>Register</h2>
+    <div className="auth-page">
+      <form className="auth-card" onSubmit={handleRegister}>
+        <div>
+          <h2 className="auth-title">Create account</h2>
+          <p className="auth-subtitle">Start chatting instantly</p>
+        </div>
 
-  {error && <p className="error">{error}</p>}
-  {success && <p className="success">{success}</p>}
+        {error && <p className="auth-error">{error}</p>}
 
-  <input
-    type="email"
-    placeholder="Email"
-    value={email}
-    onChange={(e) => setEmail(e.target.value)}
-  />
+        <input
+          className="auth-input"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-  <input
-    type="password"
-    placeholder="Password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-  />
+        <input
+          className="auth-input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-  <button type="submit" disabled={loading}>
-    {loading ? "Registering..." : "Register"}
-  </button>
+        <button className="auth-button" type="submit" disabled={loading}>
+          {loading ? "Creating account..." : "Register"}
+        </button>
 
-  <button type="button" onClick={() => navigate("/")}>
-    Back to Login
-  </button>
-    </form>
-
+        <div className="auth-footer">
+          Already have an account? <Link to="/login">Login</Link>
+        </div>
+      </form>
+    </div>
   );
 }
 

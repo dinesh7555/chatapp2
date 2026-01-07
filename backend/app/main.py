@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import engine, get_db
-from app import models, schemas, auth
+from app import models, schemas, auth 
 
 from app.neo4j_db import neo4j_db
 from app.chat import router as chat_router
@@ -11,9 +11,14 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 # Create tables in MySQL
-models.Base.metadata.create_all(bind=engine)
+
+
+
 
 app = FastAPI()
+@app.on_event("startup")
+def on_startup():
+    models.Base.metadata.create_all(bind=engine)
 app.include_router(chat_router)
 app.add_middleware(
     CORSMiddleware,
@@ -45,16 +50,23 @@ def login(user: schemas.UserLogin,db: Session = Depends(get_db)):
     db_user = db.query(models.User).filter(
         models.User.email == user.email
     ).first()
-    if not db_user or not auth.verify_password(user.password,db_user.hashed_password):
+    if not db_user :
         raise HTTPException(
             status_code=400,
             detail="Invalid credentials"
         )
+    if not auth.verify_password(user.password, db_user.hashed_password):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid password"
+        )
     token = auth.create_access_token(
     {"sub": str(db_user.id)}
     )
-    return {"access_token": token}
-
+    return {
+       "access_token": token,
+        "token_type": "bearer"
+    }
 
 
 
