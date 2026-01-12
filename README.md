@@ -34,6 +34,72 @@ A full-stack AI-powered chat application with user authentication, real-time con
 - **MySQL**: Relational database for user data
 - **Neo4j**: Graph database for chat relationships
 
+## Project Structure
+
+```
+chat-app/
+├── docker-compose.yml
+├── README.md
+├── backend/
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   └── app/
+│       ├── __init__.py
+│       ├── auth.py
+│       ├── chat.py
+│       ├── config.py
+│       ├── database.py
+│       ├── llm.py
+│       ├── main.py
+│       ├── models.py
+│       ├── neo4j_db.py
+│       ├── schemas.py
+│       ├── __pycache__/
+│       ├── repositories/
+│       │   ├── conversation_repo.py
+│       │   ├── memory_repo.py
+│       │   ├── message_repo.py
+│       │   └── topic_repo.py
+│       └── services/
+│           ├── llm_service.py
+│           ├── semantic_memory.py
+│           └── title_service.py
+├── frontend/
+│   ├── Dockerfile
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── README.md
+│   ├── vite.config.js
+│   ├── public/
+│   └── src/
+│       ├── App.css
+│       ├── App.jsx
+│       ├── index.css
+│       ├── main.jsx
+│       ├── router.jsx
+│       ├── api/
+│       │   ├── auth.js
+│       │   ├── chat.js
+│       │   └── http.js
+│       ├── assets/
+│       ├── components/
+│       │   ├── chat/
+│       │   │   ├── chat.css
+│       │   │   ├── ChatInput.jsx
+│       │   │   ├── ChatMessage.jsx
+│       │   │   └── ChatWindow.jsx
+│       │   └── layout/
+│       │       ├── layout.css
+│       │       ├── Layout.jsx
+│       │       ├── Sidebar.jsx
+│       │       └── Topbar.jsx
+│       └── pages/
+│           ├── auth.css
+│           ├── Login.jsx
+│           └── Register.jsx
+
+
 ## Prerequisites
 
 - Docker and Docker Compose

@@ -49,7 +49,7 @@ html, body{
   display: flex;
   flex: 1;
   min-height: 0;        
-  position: relative;
+  overflow:hidden
 }
 
 
@@ -57,15 +57,19 @@ html, body{
 .sidebar {
   position: absolute;
   left: 0;
-  top: 0;
-  height: 100%;
+  top: 50px;                 /* 🔥 push below topbar */
+  height: calc(100% - 50px); /* 🔥 fit remaining height */
   width: 250px;
   background: #2b2c2f;
   color: white;
   padding: 12px;
+
+  display: flex;              /* 🔥 IMPORTANT */
+  flex-direction: column;     /* 🔥 IMPORTANT */
+
   transform: translateX(-100%);
   transition: transform 0.25s ease;
-  z-index: 20;  
+  z-index: 20;
 }
 
 .sidebar.open {
@@ -132,6 +136,10 @@ html, body{
   display: flex;
   flex-direction: column;
   gap: 6px;
+
+  overflow-y: auto;   /* ✅ ENABLE SCROLL */
+  flex: 1;            /* 🔥 TAKE REMAINING SPACE */
+  min-height: 0;      
 }
 
 .chat-item {
@@ -237,10 +245,12 @@ html, body{
 .btn-danger:hover {
   background: #b91c1c;
 }
-.chat-window,
-.chat-container,
-.body-container {
-  overflow: hidden;
+
+
+.messages {
+  flex: 1;
+  min-height: 0;      /* 🔥 REQUIRED for flex scroll */
+  overflow-y: auto;   /* ✅ THIS scrolls */
 }
 
 /* Animation */
